@@ -11,10 +11,12 @@ def main():
 
     for player_dict in response:
         player = Player(player_dict)
-        if player.nationality == nationality_input:
+        if player.nationality == nationality_input.upper():
             players.append(player)
 
     print(f"Players from {nationality_input}:")
+
+    players = sorted(players, key=lambda player: player.points, reverse=True)
 
     for player in players:
         print(player)
