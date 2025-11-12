@@ -37,12 +37,15 @@ class StatisticsService:
         def sort_by_assists(player):
             return player.assists
         
+        
         if (sort_by == SortBy.POINTS):
             sb = sort_by_points
         if (sort_by == SortBy.GOALS):
             sb = sort_by_goals
         if (sort_by == SortBy.ASSISTS):
-            sb = sort_by_assists  
+            sb = sort_by_assists
+        else:
+            sb = sort_by_points
 
         sorted_players = sorted(
             self._players,
