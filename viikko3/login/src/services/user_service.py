@@ -31,16 +31,22 @@ class UserService:
         self.validate(username, password, password_confirmation)
 
         user = self._user_repository.create(
-            User(username, password)
-        )
+                User(username, password)
+            )
 
         return user
 
     def validate(self, username, password, password_confirmation):
         if not username or not password:
             raise UserInputError("Username and password are required")
-
-        # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
+        elif len(username) < 3:
+            raise ValueError('Username must be at least 3 characters long')
+        elif password != password_confirmation:
+            raise ValueError('Passwords do not match')
+        elif len(password) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        elif password.isalpha() or password.isnumeric():
+            raise ValueError('Password must must contain both letters and numbers')
 
 
 user_service = UserService()
