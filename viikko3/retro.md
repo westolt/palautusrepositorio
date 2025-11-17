@@ -18,7 +18,7 @@ Otsikoiden alle kirjoitetaan tiimin keksimät ajatukset tiivistettyinä.
 
 Tämä tekniikka kestää yleensä 60 minuuttia. Tiimin jäsenet kirjoittavat erillisille lapuille sprintin aikana syntyneistä havainnoistaan.
 
-Katselmoinnissa jokainen esittelee vuorollaan lappunsa pikaisesti ja asettaa sen taululle jonkin otsikon alle (Glad, Sad ja Mad), mikä parhaiten kuvaa lapun aiheuttamia tuntemuksia.
+Katselmoinnissa jokainen esittelee vuorollaan lappunsa pikaisesti ja asettaa sen taululle jonkin otsikon alle (Glad, Sad tai Mad), mikä parhaiten kuvaa lapun aiheuttamia tuntemuksia.
 
 Tämän jälkeen jokainen tiimin jäsen saa äänestää lappuja (max 5), joista haluaa keskustella.
 
