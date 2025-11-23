@@ -18,9 +18,9 @@ class TestKauppa(unittest.TestCase):
         # tehdään toteutus saldo-metodille
         def varasto_saldo(tuote_id):
             if tuote_id == 1:
-                return 10
-            elif tuote_id == 2:
                 return 5
+            elif tuote_id == 2:
+                return 3
             elif tuote_id == 3:
                 return 0
 
@@ -82,3 +82,40 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         self.pankki_mock.tilisiirto.assert_called_with('pekka', ANY, '12345', ANY, 5)
+
+    def test_uusi_asiointi_nollaa_tiedot(self):
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(3)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.kauppa.aloita_asiointi()
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with('pekka', ANY, '12345', ANY, 0)
+
+    def test_uusi_viitenumero_eri_ostoksilla(self):
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(3)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 1)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 2)
+
+    def test_poista_korista(self):
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+
+        self.assertEqual(self.kauppa._ostoskori.hinta(), 8)
+        
+        self.kauppa.poista_korista(2)
+        
+        self.assertEqual(self.kauppa._ostoskori.hinta(), 5)
