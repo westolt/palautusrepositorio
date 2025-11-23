@@ -119,3 +119,4 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.poista_korista(2)
         
         self.assertEqual(self.kauppa._ostoskori.hinta(), 5)
+        # tägi tehtävä
