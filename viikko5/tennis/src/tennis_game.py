@@ -31,7 +31,6 @@ class TennisGame:
             return "Win for player1"
 
         return "Win for player2"
-        
     def give_score_to_player(self, score1, score2):
         score = ""
         current_score = 0
