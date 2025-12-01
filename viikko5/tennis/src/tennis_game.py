@@ -33,7 +33,7 @@ class TennisGame:
 
         return "Win for player2"
         
-    def give_score_to_player(self, score1, score2):
+    def get_formatted_score(self, score1, score2):
         score = ""
         current_score = 0
 
@@ -63,4 +63,4 @@ class TennisGame:
 
         if self.m_score1 >= 4 or self.m_score2 >= 4:
             return self.get_advantage_score(self.m_score1, self.m_score2)
-        return self.give_score_to_player(self.m_score1, self.m_score2)
+        return self.get_formatted_score(self.m_score1, self.m_score2)
