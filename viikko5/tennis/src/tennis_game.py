@@ -20,7 +20,6 @@ class TennisGame:
             return "Thirty-All"
         else:
             return "Deuce"
-        
     def get_advantage_score(self, score1, score2):
         difference = score1 - score2
 
