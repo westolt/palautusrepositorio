@@ -63,5 +63,4 @@ class TennisGame:
 
         if self.m_score1 >= 4 or self.m_score2 >= 4:
             return self.get_advantage_score(self.m_score1, self.m_score2)
-            
         return self.give_score_to_player(self.m_score1, self.m_score2)
