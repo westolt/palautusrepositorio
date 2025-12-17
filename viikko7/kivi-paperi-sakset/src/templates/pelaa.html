@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelaa - Kivi-Paperi-Sakset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .pelimuoto {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .pisteet {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .pisteet h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .pisteet-rivi {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        .siirto-aluue {
+            margin: 25px 0;
+        }
+        .siirto-napit {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .siirto-nappi {
+            padding: 40px 30px;
+            font-size: 48px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .siirto-nappi:hover {
+            background-color: #1976D2;
+            transform: scale(1.1);
+        }
+        .viesti {
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #dff0d8;
+            border: 1px solid #d0e9c6;
+            border-radius: 5px;
+            color: #3c763d;
+            text-align: center;
+        }
+        .virhe {
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            border-radius: 5px;
+            color: #a94442;
+            text-align: center;
+        }
+        .lopeta-nappi {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .lopeta-nappi:hover {
+            background-color: #da190b;
+        }
+        .ohje {
+            text-align: center;
+            color: #666;
+            margin: 15px 0;
+        }
+        .voitto-viesti {
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #dff0d8;
+            border: 2px solid #5cb85c;
+            border-radius: 8px;
+            color: #3c763d;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .tappio-viesti {
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f2dede;
+            border: 2px solid #a94442;
+            border-radius: 8px;
+            color: #a94442;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .voitto-raja {
+            margin-top: 10px;
+            font-size: 14px;
+            font-style: italic;
+            color: #666;
+        }
+        .siirto-napit.peli-paattynyt {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .siirto-napit.peli-paattynyt .siirto-nappi {
+            cursor: not-allowed;
+        }
+        .kierroksen-tulokset {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+        }
+        .siirto-animaatio {
+            font-size: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .siirto-teksti {
+            font-size: 14px;
+            color: #666;
+        }
+        .vs-teksti {
+            font-size: 24px;
+            font-weight: bold;
+            color: #999;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .animaatio-toiminto {
+            position: absolute;
+            font-size: 36px;
+            animation: animaatio 1s ease-out forwards;
+        }
+        @keyframes animaatio {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5) translateY(-50px);
+            }
+        }
+        .kierroksen-voittaja-viesti {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
+        .kierros-voitti-pelaaja1 {
+            background-color: #c8e6c9;
+            color: #2e7d32;
+            animation: slideIn 0.5s ease-out;
+        }
+        .kierros-voitti-pelaaja2 {
+            background-color: #ffccbc;
+            color: #d84315;
+            animation: slideIn 0.5s ease-out;
+        }
+        .kierros-tasapeli {
+            background-color: #fff9c4;
+            color: #f57f17;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .siirto-animaatio.voittaja {
+            animation: bounce 0.6s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪨 📄 ✂️ Kivi-Paperi-Sakset</h1>
+        <div class="pelimuoto">{{ pelimuoto }}</div>
+        
+        <div class="pisteet">
+            <h2>Tilanne</h2>
+            <div class="pisteet-rivi">
+                <strong>Pelaaja 1:</strong> {{ ekan_pisteet }} | 
+                <strong>Pelaaja 2:</strong> {{ tokan_pisteet }} | 
+                <strong>Tasapelit:</strong> {{ tasapelit }}
+            </div>
+            <div class="voitto-raja">
+                Peli loppuu kun joku pelaaja saa 3 voittoa
+            </div>
+        </div>
+        
+        {% if peli_voitettu %}
+            {% if voittaja == 'pelaaja1' %}
+            <div class="voitto-viesti">
+                🎉 ONNITTELUT! Voitit pelin! 🎉
+            </div>
+            {% else %}
+            <div class="tappio-viesti">
+                😔 Vastustaja voitti pelin!
+            </div>
+            {% endif %}
+        {% endif %}
+        
+        {% if viesti %}
+        <div class="viesti">
+            {{ viesti }}
+        </div>
+        {% endif %}
+        
+        {% if virhe %}
+        <div class="virhe">
+            {{ virhe }}
+        </div>
+        {% endif %}
+        
+        {% if pelaajan_siirto %}
+        <div class="kierroksen-tulokset">
+            <div class="siirto-animaatio {% if kierroksen_voittaja == 'pelaaja1' %}voittaja{% endif %}">
+                <div>
+                    {% if pelaajan_siirto == 'k' %}🪨
+                    {% elif pelaajan_siirto == 'p' %}📄
+                    {% elif pelaajan_siirto == 's' %}✂️
+                    {% endif %}
+                </div>
+                <div class="siirto-teksti">Sinä</div>
+            </div>
+            
+            <div class="vs-teksti">VS</div>
+            
+            <div class="siirto-animaatio {% if kierroksen_voittaja == 'pelaaja2' %}voittaja{% endif %}">
+                <div>
+                    {% if vastustajan_siirto == 'k' %}🪨
+                    {% elif vastustajan_siirto == 'p' %}📄
+                    {% elif vastustajan_siirto == 's' %}✂️
+                    {% endif %}
+                </div>
+                <div class="siirto-teksti">Vastustaja</div>
+            </div>
+        </div>
+        
+        {% if kierroksen_voittaja == 'pelaaja1' %}
+            <div class="kierroksen-voittaja-viesti kierros-voitti-pelaaja1">
+                ✨ Sinä voitit tämän kierroksen! ✨
+            </div>
+        {% elif kierroksen_voittaja == 'pelaaja2' %}
+            <div class="kierroksen-voittaja-viesti kierros-voitti-pelaaja2">
+                ✨ Vastustaja voitti tämän kierroksen! ✨
+            </div>
+        {% elif kierroksen_voittaja == 'tasapeli' %}
+            <div class="kierroksen-voittaja-viesti kierros-tasapeli">
+                ⚖️ Tasapeli! ⚖️
+            </div>
+        {% endif %}
+        {% endif %}
+        
+        {% if odottaa_toista_pelaajaa %}
+        <div class="viesti">
+            Pelaaja 1 on tehnyt siirtonsa! Nyt on Pelaaja 2:n vuoro.
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <div class="ohje">
+                <strong>Pelaaja 2, valitse siirtosi:</strong>
+            </div>
+            
+            <form method="POST" action="/siirto">
+                <input type="hidden" name="siirto" value="{{ ensimmaisen_siirto }}">
+                <div class="siirto-napit">
+                    <button type="submit" name="toisen_siirto" value="k" class="siirto-nappi" title="Kivi">
+                        🪨
+                    </button>
+                    <button type="submit" name="toisen_siirto" value="p" class="siirto-nappi" title="Paperi">
+                        📄
+                    </button>
+                    <button type="submit" name="toisen_siirto" value="s" class="siirto-nappi" title="Sakset">
+                        ✂️
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div style="text-align: center; margin-top: 15px;">
+            <div class="ohje">
+                <strong>{% if pelityyppi == 'a' %}Pelaaja 1, {% endif %}Valitse siirtosi:</strong>
+            </div>
+            
+            <form method="POST" action="/siirto">
+                <div class="siirto-napit {% if peli_voitettu %}peli-paattynyt{% endif %}">
+                    <button type="submit" name="siirto" value="k" class="siirto-nappi" title="Kivi" {% if peli_voitettu %}disabled{% endif %}>
+                        🪨
+                    </button>
+                    <button type="submit" name="siirto" value="p" class="siirto-nappi" title="Paperi" {% if peli_voitettu %}disabled{% endif %}>
+                        📄
+                    </button>
+                    <button type="submit" name="siirto" value="s" class="siirto-nappi" title="Sakset" {% if peli_voitettu %}disabled{% endif %}>
+                        ✂️
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        
+        <a href="/lopeta">
+            <button class="lopeta-nappi">Lopeta peli ja palaa alkuun</button>
+        </a>
+    </div>
+    
+    <script>
+        // Lisää visuaalisia efektejä pelaamiseen
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animoi kierroksen tulokset
+            const kierrosAnim = document.querySelector('.kierroksen-tulokset');
+            if (kierrosAnim) {
+                kierrosAnim.style.animation = 'slideIn 0.5s ease-out';
+            }
+            
+            // Lisää hover-efektit napeille
+            const napit = document.querySelectorAll('.siirto-nappi');
+            napit.forEach(nappi => {
+                nappi.addEventListener('click', function(e) {
+                    if (!this.disabled) {
+                        // Lisää pulssi-animaatio
+                        this.style.animation = 'none';
+                        setTimeout(() => {
+                            this.style.animation = 'bounce 0.6s ease';
+                        }, 10);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
